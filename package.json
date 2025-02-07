@@ -1,0 +1,12 @@
+{
+  "name": "my-event-sync",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && yarn build"
+  },
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true
+}

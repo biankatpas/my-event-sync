@@ -1,5 +1,5 @@
 // router.js
-const { addEvent, listEvents, removeEvent, buildResponse } = require('./helpers');
+const { addEvent, editEvent, listEvents, removeEvent, buildResponse } = require('./helpers');
 
 exports.handleRequest = async (event) => {
   console.log("Received event:", JSON.stringify(event));
@@ -17,6 +17,9 @@ exports.handleRequest = async (event) => {
           return buildResponse(400, { message: "Event id is required for deletion." });
         }
         return await removeEvent(eventId);
+      case 'PUT':
+        const updateData = JSON.parse(event.body);
+        return await editEvent(updateData);
       default:
         return buildResponse(405, { message: "Method not allowed." });
     }

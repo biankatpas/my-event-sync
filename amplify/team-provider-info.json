@@ -15,7 +15,11 @@
       "function": {
         "event": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/event-71727536566250754179-build.zip"
+          "s3Key": "amplify-builds/event-483261683239386d677a-build.zip"
+        },
+        "deleteOldEvents": {
+          "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
+          "s3Key": "amplify-builds/deleteOldEvents-30653030694668765a72-build.zip"
         }
       },
       "api": {
@@ -23,6 +27,9 @@
       },
       "storage": {
         "dynamo3ebf100b": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }

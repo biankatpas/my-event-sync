@@ -16,6 +16,22 @@
     }
   },
   "function": {
+    "deleteOldEvents": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "dynamo3ebf100b"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "event": {
       "build": true,
       "dependsOn": [
@@ -33,7 +49,29 @@
       "service": "Lambda"
     }
   },
+  "hosting": {
+    "S3AndCloudFront": {
+      "providerPlugin": "awscloudformation",
+      "service": "S3AndCloudFront"
+    }
+  },
   "parameters": {
+    "AMPLIFY_function_deleteOldEvents_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteOldEvents"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteOldEvents_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteOldEvents"
+        }
+      ]
+    },
     "AMPLIFY_function_event_deploymentBucketName": {
       "usedBy": [
         {

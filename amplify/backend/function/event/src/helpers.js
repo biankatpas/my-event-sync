@@ -36,13 +36,59 @@ const addEvent = async (data) => {
   return buildResponse(200, { message: "Event added successfully." });
 };
 
+const editEvent = async (data) => {
+  if (!data || !data.id || !data.title || !data.description || !data.guests || !data.date || !data.time) {
+    throw new Error("Invalid event data. Must include id, title, description, guests, date, and time.");
+  }
+  
+  const params = {
+    TableName: TABLE_NAME,
+    Key: {
+      id: data.id
+    },
+    UpdateExpression: "set title = :t, description = :d, guests = :g, #dt = :dt, #tm = :tm",
+    ExpressionAttributeNames: {
+      "#dt": "date",
+      "#tm": "time"
+    },
+    ExpressionAttributeValues: {
+      ":t": data.title,
+      ":d": data.description,
+      ":g": data.guests,
+      ":dt": data.date,
+      ":tm": data.time
+    },
+    ReturnValues: "ALL_NEW"
+  };
+
+  const result = await dynamoDb.update(params).promise();
+  return buildResponse(200, { message: "Event updated successfully.", updated: result.Attributes });
+};
+
 const listEvents = async () => {
   const params = {
     TableName: TABLE_NAME,
   };
 
   const result = await dynamoDb.scan(params).promise();
-  return buildResponse(200, result.Items);
+
+  const sortedItems = result.Items.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    const dateDiff = dateA - dateB;
+
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+
+    const [aHour, aMinute] = a.time.split(':').map(Number);
+    const [bHour, bMinute] = b.time.split(':').map(Number);
+    const timeA = aHour * 60 + aMinute;
+    const timeB = bHour * 60 + bMinute;
+    return timeA - timeB;
+  });
+
+  return buildResponse(200, sortedItems);
 };
 
 const removeEvent = async (id) => {
@@ -57,4 +103,4 @@ const removeEvent = async (id) => {
   return buildResponse(200, { message: "Event removed successfully." });
 };
 
-module.exports = { addEvent, listEvents, removeEvent, buildResponse };
+module.exports = { addEvent, editEvent, listEvents, removeEvent, buildResponse };

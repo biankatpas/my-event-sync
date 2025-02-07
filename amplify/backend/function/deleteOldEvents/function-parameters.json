@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "storage": {
+      "dynamo3ebf100b": [
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

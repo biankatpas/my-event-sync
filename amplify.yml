@@ -1,0 +1,19 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install --cwd frontend
+    build:
+      commands:
+        - yarn build --cwd frontend
+        - mkdir -p dist
+        - cp -R frontend/build/. dist/
+        - ls -la dist
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - frontend/node_modules/**/*
