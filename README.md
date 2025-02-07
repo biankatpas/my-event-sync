@@ -30,6 +30,48 @@ The repository is organized into two main parts: the backend managed by AWS Ampl
 - An AWS account with Amplify CLI configured
 - Amplify CLI installed globally
 
+## Deployment
+
+The deployment process uses AWS Amplify to build and publish the React frontend along with your backend resources.
+
+**Build the Frontend Locally:**
+
+Navigate to the frontend folder and run:
+
+```bash
+  cd frontend
+  yarn build
+```
+
+This generates the production build in the frontend/build directory.
+
+**Prepare the Distribution Folder:**
+
+Navigate to the root folder and run:
+
+```bash
+  yarn --cwd frontend build
+  mkdir -p dist
+  cp -R frontend/build/. dist/
+```
+
+This configuration does the following:
+
+- Installs dependencies in the frontend folder.
+- Runs the build command in the frontend folder.
+- Creates a dist folder at the root and copies all build artifacts into it.
+- Specifies the dist folder as the source for deployment.
+
+**Publish with Amplify:**
+
+From the root of your repository (where the amplify folder is located), run:
+
+```bash
+  amplify publish
+```
+
+This command builds the project, copies the build output to dist, and deploys the application via S3 and CloudFront.
+
 ## Usage
 
 **Adding an Event**
