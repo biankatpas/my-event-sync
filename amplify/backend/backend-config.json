@@ -1,0 +1,60 @@
+{
+  "api": {
+    "myeventsyncapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "event"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "event": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "dynamo3ebf100b"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_event_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "event"
+        }
+      ]
+    },
+    "AMPLIFY_function_event_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "event"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "dynamo3ebf100b": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
+}

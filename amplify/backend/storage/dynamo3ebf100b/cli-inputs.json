@@ -1,0 +1,10 @@
+{
+  "resourceName": "dynamo3ebf100b",
+  "tableName": "event",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
