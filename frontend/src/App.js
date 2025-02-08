@@ -12,8 +12,7 @@ import {
   CardContent,
   CardActions,
   Chip,
-  Box,
-  IconButton
+  Box
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -53,7 +52,7 @@ I18n.putVocabularies({
     'Code *': 'Código',
     'New Password': 'Nova senha',
     'Submit': 'Alterar',
-    'User does not exist.': 'Usuário não cadastrado.',
+    'User does not exist.': 'Usuário não cadastrado.'
   }
 });
 I18n.setLanguage('pt-BR');
@@ -84,6 +83,7 @@ const theme = createTheme({
       fontWeight: 400,
     },
   },
+  spacing: 4,
 });
 
 // Estilos para os botões
@@ -129,6 +129,7 @@ function App() {
   dayAfterTomorrowDate.setDate(todayDate.getDate() + 2);
   const dayAfterTomorrowStr = dayAfterTomorrowDate.toISOString().split('T')[0];
 
+  // Atualização: para eventos do dia após amanhã, os chips terão fundo "#fff176"
   const getChipStyles = (eventDate) => {
     if (eventDate < today) {
       return { bg: "#e0e0e0", color: "black" };
@@ -137,13 +138,26 @@ function App() {
     } else if (eventDate === tomorrowStr) {
       return { bg: "#f8bbd0", color: "black" };
     } else if (eventDate === dayAfterTomorrowStr) {
-      return { bg: "#fff9c4", color: "black" };
+      return { bg: "#fff176", color: "black" }; // Cor diferenciada para os chips
     } else {
       return { bg: "#bbdefb", color: "black" };
     }
   };
 
-  // Verifica o usuário autenticado ao carregar
+  const getCardBackgroundColor = (eventDate) => {
+    if (eventDate < today) {
+      return "#fafafa";
+    } else if (eventDate === today) {
+      return "#e8f5e9";
+    } else if (eventDate === tomorrowStr) {
+      return "#ffcdd2";
+    } else if (eventDate === dayAfterTomorrowStr) {
+      return "#fff9c4";
+    } else {
+      return "#f0f8ff";
+    }
+  };
+
   useEffect(() => {
     Auth.getCurrentUser({ bypassCache: true })
       .then(u => {
@@ -156,7 +170,6 @@ function App() {
       });
   }, []);
 
-  // Atualiza o estado via Hub (para signOut, por exemplo)
   useEffect(() => {
     const unsubscribe = Hub.listen('auth', (data) => {
       const { event } = data.payload;
@@ -270,7 +283,6 @@ function App() {
     }
   };
 
-  // Função para redirecionar para a página de login
   const handleLogin = () => {
     navigate('/login');
   };
@@ -282,20 +294,6 @@ function App() {
       setIsAuthenticated(false);
     } catch (error) {
       console.error("Erro ao sair:", error);
-    }
-  };
-
-  const getCardBackgroundColor = (eventDate) => {
-    if (eventDate < today) {
-      return "#fafafa";
-    } else if (eventDate === today) {
-      return "#e8f5e9";
-    } else if (eventDate === tomorrowStr) {
-      return "#ffcdd2";
-    } else if (eventDate === dayAfterTomorrowStr) {
-      return "#fff9c4";
-    } else {
-      return "#f0f8ff";
     }
   };
 
@@ -359,7 +357,7 @@ function App() {
                 label="Data"
                 name="date"
                 type="date"
-                InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
                 value={formData.date}
                 onChange={handleInputChange}
                 fullWidth
@@ -371,7 +369,7 @@ function App() {
                 label="Horário"
                 name="time"
                 type="time"
-                InputLabelProps={{ shrink: true }}
+                InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
                 value={formData.time}
                 onChange={handleInputChange}
                 fullWidth
@@ -396,15 +394,25 @@ function App() {
             const cardBg = getCardBackgroundColor(event.date);
             const chipStyles = getChipStyles(event.date);
             return (
-              <Grid item xs={12} sm={6} md={2} key={event.id}>
-                <Card sx={{ backgroundColor: cardBg }}>
-                  <CardContent>
+              // Configuração para 6 cards por linha: xs=12, sm=6, md=4, lg=2, xl=2
+              <Grid item xs={12} sm={6} md={4} lg={2} xl={2} key={event.id}>
+                <Card
+                  sx={{
+                    backgroundColor: cardBg,
+                    height: '14rem', // altura definida em rem (14rem)
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, overflow: 'hidden', mb: 1 }}>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item>
                         <CalendarTodayIcon />
                       </Grid>
                       <Grid item xs>
-                        <Typography variant="h6">{event.title}</Typography>
+                        <Typography variant="h6" noWrap>
+                          {event.title}
+                        </Typography>
                       </Grid>
                     </Grid>
                     <Chip
@@ -433,7 +441,7 @@ function App() {
                         />
                       </Grid>
                     </Grid>
-                    <Typography variant="body2" sx={{ mt: 1 }}>
+                    <Typography variant="body2" sx={{ mt: 1 }} noWrap>
                       {event.description}
                     </Typography>
                   </CardContent>
