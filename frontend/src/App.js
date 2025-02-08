@@ -8,8 +8,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogActions,
-  InputAdornment,
   Card,
   CardContent,
   CardActions,
@@ -24,14 +22,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
 import { I18n } from '@aws-amplify/core';
 import * as Auth from '@aws-amplify/auth';
 import { Hub } from '@aws-amplify/core';
-import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { useNavigate } from 'react-router-dom';
 import '@aws-amplify/ui-react/styles.css';
 
-// Define um dicionário de traduções para pt-BR
+// Define traduções para pt-BR
 I18n.putVocabularies({
   'pt-BR': {
     'Sign In': 'Entrar',
@@ -56,6 +53,7 @@ I18n.putVocabularies({
     'Code *': 'Código',
     'New Password': 'Nova senha',
     'Submit': 'Alterar',
+    'User does not exist.': 'Usuário não cadastrado.',
   }
 });
 I18n.setLanguage('pt-BR');
@@ -88,7 +86,7 @@ const theme = createTheme({
   },
 });
 
-// Estilos para os botões (padrão da aplicação)
+// Estilos para os botões
 const primaryButtonSx = {
   backgroundColor: '#64b5f6',
   color: 'white',
@@ -105,6 +103,7 @@ const secondaryButtonSx = {
 
 function App() {
   const endpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/event';
+  const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
   const [formData, setFormData] = useState({
@@ -117,11 +116,9 @@ function App() {
   const [editingEvent, setEditingEvent] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  // Estado de autenticação (a página é pública)
+  // Estados de autenticação
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  // Controle para exibir a modal de login
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const todayDate = new Date();
   const today = todayDate.toISOString().split('T')[0];
@@ -148,7 +145,7 @@ function App() {
 
   // Verifica o usuário autenticado ao carregar
   useEffect(() => {
-    Auth.getCurrentUser()
+    Auth.getCurrentUser({ bypassCache: true })
       .then(u => {
         setUser(u);
         setIsAuthenticated(true);
@@ -159,12 +156,13 @@ function App() {
       });
   }, []);
 
-  // Atualiza o estado de autenticação via Hub e chama fetchEvents para atualizar a página
+  // Atualiza o estado via Hub (para signOut, por exemplo)
   useEffect(() => {
     const unsubscribe = Hub.listen('auth', (data) => {
       const { event } = data.payload;
+      console.log("Evento do Hub:", event);
       if (event === 'signIn') {
-        Auth.getCurrentUser()
+        Auth.getCurrentUser({ bypassCache: true })
           .then(u => {
             setUser(u);
             setIsAuthenticated(true);
@@ -181,13 +179,6 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
-
-  // Fecha a modal de login automaticamente se o usuário estiver autenticado
-  useEffect(() => {
-    if (isAuthenticated) {
-      setShowAuthDialog(false);
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     fetchEvents();
@@ -279,8 +270,9 @@ function App() {
     }
   };
 
+  // Função para redirecionar para a página de login
   const handleLogin = () => {
-    setShowAuthDialog(true);
+    navigate('/login');
   };
 
   const handleLogout = async () => {
@@ -301,7 +293,7 @@ function App() {
     } else if (eventDate === tomorrowStr) {
       return "#ffcdd2";
     } else if (eventDate === dayAfterTomorrowStr) {
-      return "#fffde7";
+      return "#fff9c4";
     } else {
       return "#f0f8ff";
     }
@@ -318,9 +310,7 @@ function App() {
             <Typography variant="subtitle1">Bem-vindo!</Typography>
           ) : (
             <Typography variant="subtitle1">
-              Olá, {user && user.signInDetails && user.signInDetails.loginId 
-                ? user.signInDetails.loginId
-                : 'Usuário'}!
+              Olá, {user && user.signInDetails && user.signInDetails.loginId ? user.signInDetails.loginId : 'Usuário'}!
             </Typography>
           )}
           {!isAuthenticated ? (
@@ -333,41 +323,6 @@ function App() {
             </Button>
           )}
         </Box>
-
-        {/* Modal de Autenticação */}
-        <Dialog
-          open={showAuthDialog}
-          onClose={() => setShowAuthDialog(false)}
-          fullWidth
-          maxWidth="sm"
-        >
-          <Box sx={{ position: 'relative' }}>
-            <IconButton
-              onClick={() => setShowAuthDialog(false)}
-              sx={{
-                position: 'absolute',
-                right: 8,
-                top: 8,
-                color: '#64b5f6'
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <DialogContent sx={{ minWidth: 400, pt: 4 }}>
-              <Authenticator
-                hideSignUp={false}
-                onStateChange={(authState, authData) => {
-                  if (authState === 'signedIn') {
-                    setUser(authData);
-                    setIsAuthenticated(true);
-                    setShowAuthDialog(false);
-                    fetchEvents();
-                  }
-                }}
-              />
-            </DialogContent>
-          </Box>
-        </Dialog>
 
         {/* Formulário para novo evento */}
         <Paper style={{ padding: '0.5rem', marginBottom: '2rem' }}>
@@ -545,9 +500,9 @@ function App() {
                     fullWidth
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">
+                        <Box sx={{ mr: 1 }}>
                           <CalendarTodayIcon />
-                        </InputAdornment>
+                        </Box>
                       )
                     }}
                   />
