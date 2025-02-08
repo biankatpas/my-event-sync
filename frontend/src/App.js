@@ -327,15 +327,16 @@ function App() {
         {/* Formulário para novo evento */}
         <Paper style={{ padding: '0.5rem', marginBottom: '2rem' }}>
           <Grid container spacing={1} alignItems="center">
-            <Grid item xs="auto">
+            <Grid item xs={12} sm="auto">
               <TextField
                 label="Evento"
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
+                fullWidth
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} sm>
               <TextField
                 label="Descrição"
                 name="description"
@@ -344,15 +345,16 @@ function App() {
                 fullWidth
               />
             </Grid>
-            <Grid item xs="auto">
+            <Grid item xs={12} sm="auto">
               <TextField
                 label="Envolvidos"
                 name="guests"
                 value={formData.guests}
                 onChange={handleInputChange}
+                fullWidth
               />
             </Grid>
-            <Grid item xs="auto">
+            <Grid item xs={12} sm="auto">
               <TextField
                 label="Data"
                 name="date"
@@ -360,10 +362,11 @@ function App() {
                 InputLabelProps={{ shrink: true }}
                 value={formData.date}
                 onChange={handleInputChange}
-                sx={{ width: '150px' }}
+                fullWidth
+                sx={{ width: { xs: '100%', sm: '150px' } }}
               />
             </Grid>
-            <Grid item xs="auto">
+            <Grid item xs={12} sm="auto">
               <TextField
                 label="Horário"
                 name="time"
@@ -371,9 +374,10 @@ function App() {
                 InputLabelProps={{ shrink: true }}
                 value={formData.time}
                 onChange={handleInputChange}
+                fullWidth
               />
             </Grid>
-            <Grid item xs="auto" sx={{ ml: 'auto' }}>
+            <Grid item xs={12} sm="auto" sx={{ ml: { xs: 0, sm: 'auto' }, mt: { xs: 1, sm: 0 } }}>
               <Button
                 variant="contained"
                 onClick={handleAddEvent}
