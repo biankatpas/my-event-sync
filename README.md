@@ -50,9 +50,7 @@ This generates the production build in the frontend/build directory.
 Navigate to the root folder and run:
 
 ```bash
-  yarn --cwd frontend build
-  mkdir -p dist
-  cp -R frontend/build/. dist/
+  yarn --cwd frontend build && mkdir -p dist && cp -R frontend/build/. dist/
 ```
 
 This configuration does the following:

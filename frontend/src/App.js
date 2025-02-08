@@ -6,19 +6,23 @@ import {
   Grid,
   TextField,
   Button,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  InputAdornment
+  InputAdornment,
+  Card,
+  CardContent,
+  CardActions,
+  Chip
 } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from '@mui/icons-material/Save';
 
 const convertYyyyMmDdToDdMmYyyy = (dateStr) => {
   if (!dateStr) return '';
@@ -34,6 +38,20 @@ const convertDdMmYyyyToYyyyMmDd = (dateStr) => {
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
 };
 
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Poppins", sans-serif',
+    h6: {
+      fontFamily: '"Poppins", sans-serif',
+      fontWeight: 600,
+    },
+    body2: {
+      fontFamily: '"Roboto", sans-serif',
+      fontWeight: 400,
+    },
+  },
+});
+
 function App() {
   const endpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/event';
 
@@ -45,11 +63,33 @@ function App() {
     date: '',
     time: ''
   });
-
   const [editingEvent, setEditingEvent] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  const today = new Date().toISOString().split('T')[0];
+  const todayDate = new Date();
+  const today = todayDate.toISOString().split('T')[0];
+
+  const tomorrowDate = new Date(todayDate);
+  tomorrowDate.setDate(todayDate.getDate() + 1);
+  const tomorrowStr = tomorrowDate.toISOString().split('T')[0];
+
+  const dayAfterTomorrowDate = new Date(todayDate);
+  dayAfterTomorrowDate.setDate(todayDate.getDate() + 2);
+  const dayAfterTomorrowStr = dayAfterTomorrowDate.toISOString().split('T')[0];
+
+  const getChipStyles = (eventDate) => {
+    if (eventDate < today) {
+      return { bg: "#e0e0e0", color: "black" };
+    } else if (eventDate === today) {
+      return { bg: "#c8e6c9", color: "black" };
+    } else if (eventDate === tomorrowStr) {
+      return { bg: "#f8bbd0", color: "black" };
+    } else if (eventDate === dayAfterTomorrowStr) {
+      return { bg: "#fff9c4", color: "black" };
+    } else {
+      return { bg: "#bbdefb", color: "black" };
+    }
+  };
 
   useEffect(() => {
     fetchEvents();
@@ -141,147 +181,205 @@ function App() {
     }
   };
 
+  const getCardBackgroundColor = (eventDate) => {
+    if (eventDate < today) {
+      return "#fafafa";
+    } else if (eventDate === today) {
+      return "#e8f5e9";
+    } else if (eventDate === tomorrowStr) {
+      return "#ffcdd2";
+    } else if (eventDate === dayAfterTomorrowStr) {
+      return "#fffde7";
+    } else {
+      return "#f0f8ff";
+    }
+  };
+
+  const primaryButtonSx = {
+    backgroundColor: '#64b5f6',
+    color: 'white',
+    padding: '4px',
+    '&:hover': { backgroundColor: '#42a5f5' }
+  };
+
+  const secondaryButtonSx = {
+    backgroundColor: '#e57373',
+    color: 'white',
+    padding: '4px',
+    '&:hover': { backgroundColor: '#ef5350' }
+  };
+
   return (
-    <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom>
-        Meus Eventos
-      </Typography>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="xl" style={{ marginTop: '2rem' }}>
+        <Typography variant="h4" gutterBottom>
+          Meus Eventos
+        </Typography>
 
-      {/* new event form */}
-      <Paper style={{ padding: '1rem', marginBottom: '2rem' }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField label="Evento" name="title" value={formData.title} onChange={handleInputChange} fullWidth />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField label="Local" name="description" value={formData.description} onChange={handleInputChange} fullWidth />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField label="Participantes" name="guests" value={formData.guests} onChange={handleInputChange} fullWidth />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Data"
-              name="date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={formData.date}
-              onChange={handleInputChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              label="Horário"
-              name="time"
-              type="time"
-              InputLabelProps={{ shrink: true }}
-              value={formData.time}
-              onChange={handleInputChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4} style={{ display: 'flex', alignItems: 'center' }}>
-            <Button variant="contained" color="primary" onClick={handleAddEvent} fullWidth>
-              Adicionar Evento
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {/* events table */}
-      <TableContainer component={Paper} style={{ maxHeight: 600 }}>
-        <Table stickyHeader aria-label="Tabela de Eventos">
-          <TableHead>
-            <TableRow>
-              <TableCell>Data</TableCell>
-              <TableCell>Horário</TableCell>
-              <TableCell>Participantes</TableCell>
-              <TableCell>Evento</TableCell>
-              <TableCell>Local</TableCell>
-              <TableCell>Ações</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {events.map((event) => {
-              const rowStyle = event.date === today ? { backgroundColor: '#f0f0f0' } : {};
-              return (
-                <TableRow key={event.id} style={rowStyle}>
-                  <TableCell>{convertYyyyMmDdToDdMmYyyy(event.date)}</TableCell>
-                  <TableCell>{event.time}</TableCell>
-                  <TableCell>{event.guests}</TableCell>
-                  <TableCell>{event.title}</TableCell>
-                  <TableCell>{event.description}</TableCell>
-                  <TableCell>
-                    <Button variant="contained" color="primary" onClick={() => handleOpenEditDialog(event)} style={{ marginRight: '0.5rem' }}>
-                      Editar
-                    </Button>
-                    <Button variant="contained" color="secondary" onClick={() => handleRemoveEvent(event.id)}>
-                      Remover
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* edit event modal */}
-      <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} fullWidth maxWidth="sm">
-        <DialogTitle>Editar Evento</DialogTitle>
-        <DialogContent style={{ paddingTop: '1.5rem' }}>
-          {editingEvent && (
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField label="Evento" name="title" value={editingEvent.title} onChange={handleEditInputChange} fullWidth />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField label="Local" name="description" value={editingEvent.description} onChange={handleEditInputChange} fullWidth />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField label="Participantes" name="guests" value={editingEvent.guests} onChange={handleEditInputChange} fullWidth />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Data (dd/mm/yyyy)"
-                  name="date"
-                  value={editingEvent.date}
-                  onChange={handleEditInputChange}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarTodayIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Horário"
-                  name="time"
-                  type="time"
-                  InputLabelProps={{ shrink: true }}
-                  value={editingEvent.time}
-                  onChange={handleEditInputChange}
-                  fullWidth
-                />
-              </Grid>
+        {/* Formulário para novo evento em uma única linha */}
+        <Paper style={{ padding: '0.5rem', marginBottom: '2rem' }}>
+          <Grid container spacing={1} alignItems="center">
+            <Grid item xs={12} md={2}>
+              <TextField label="Evento" name="title" value={formData.title} onChange={handleInputChange} fullWidth />
             </Grid>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={handleCloseEditDialog} color="secondary">
-            Cancelar
-          </Button>
-          <Button variant="contained" onClick={handleSaveEdit} color="primary">
-            Salvar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+            <Grid item xs={12} md={4}>
+              <TextField label="Descrição" name="description" value={formData.description} onChange={handleInputChange} fullWidth />
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <TextField label="Envolvidos" name="guests" value={formData.guests} onChange={handleInputChange} fullWidth />
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <TextField 
+                label="Data" 
+                name="date" 
+                type="date" 
+                InputLabelProps={{ shrink: true }} 
+                value={formData.date} 
+                onChange={handleInputChange} 
+                fullWidth 
+              />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <TextField 
+                label="Horário" 
+                name="time" 
+                type="time" 
+                InputLabelProps={{ shrink: true }} 
+                value={formData.time} 
+                onChange={handleInputChange} 
+                fullWidth 
+              />
+            </Grid>
+            <Grid item xs={12} md={1} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+                variant="contained"
+                onClick={handleAddEvent}
+                sx={{ ...primaryButtonSx, width: 60, minWidth: 60 }}
+                size="small"
+              >
+                <AddCircleOutlineIcon fontSize="small" />
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+
+        {/* Exibição dos eventos usando Cards (6 por linha no desktop) */}
+        <Grid container spacing={1}>
+          {events.map((event) => {
+            const cardBg = getCardBackgroundColor(event.date);
+            const chipStyles = getChipStyles(event.date);
+            return (
+              <Grid item xs={12} sm={6} md={2} key={event.id}>
+                <Card sx={{ backgroundColor: cardBg }}>
+                  <CardContent>
+                    <Grid container spacing={1} alignItems="center">
+                      <Grid item>
+                        <CalendarTodayIcon />
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="h6">{event.title}</Typography>
+                      </Grid>
+                    </Grid>
+                    <Chip 
+                      label={event.guests} 
+                      sx={{
+                        backgroundColor: chipStyles.bg,
+                        color: chipStyles.color,
+                        fontWeight: 'bold',
+                        mt: 0.5
+                      }}
+                      size="small"
+                    />
+                    <Grid container spacing={1} sx={{ mt: 1 }}>
+                      <Grid item>
+                        <Chip 
+                          label={convertYyyyMmDdToDdMmYyyy(event.date)}
+                          sx={{ backgroundColor: chipStyles.bg, color: chipStyles.color }}
+                          size="small"
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Chip 
+                          label={event.time}
+                          sx={{ backgroundColor: chipStyles.bg, color: chipStyles.color }}
+                          size="small"
+                        />
+                      </Grid>
+                    </Grid>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      {event.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button variant="contained" onClick={() => handleOpenEditDialog(event)} sx={primaryButtonSx} size="small">
+                      <EditIcon fontSize="small" />
+                    </Button>
+                    <Button variant="contained" onClick={() => handleRemoveEvent(event.id)} sx={secondaryButtonSx} size="small">
+                      <DeleteIcon fontSize="small" />
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+        {/* Modal de edição de evento */}
+        <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} fullWidth maxWidth="sm">
+          <DialogTitle>Editar Evento</DialogTitle>
+          <DialogContent sx={{ pt: '1.5rem' }}>
+            {editingEvent && (
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <TextField label="Evento" name="title" value={editingEvent.title} onChange={handleEditInputChange} fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField label="Descrição" name="description" value={editingEvent.description} onChange={handleEditInputChange} fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField label="Envolvidos" name="guests" value={editingEvent.guests} onChange={handleEditInputChange} fullWidth />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Data (dd/mm/yyyy)"
+                    name="date"
+                    value={editingEvent.date}
+                    onChange={handleEditInputChange}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CalendarTodayIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Horário"
+                    name="time"
+                    type="time"
+                    InputLabelProps={{ shrink: true }}
+                    value={editingEvent.time}
+                    onChange={handleEditInputChange}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={handleCloseEditDialog} sx={secondaryButtonSx} size="small">
+              <CancelIcon fontSize="small" />
+            </Button>
+            <Button variant="contained" onClick={handleSaveEdit} sx={primaryButtonSx} size="small">
+              <SaveIcon fontSize="small" />
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Container>
+    </ThemeProvider>
   );
 }
 
