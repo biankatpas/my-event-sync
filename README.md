@@ -45,7 +45,7 @@ Navigate to the frontend folder and run:
   yarn build
 ```
 
-This generates the production build in the frontend/build directory.
+This generates the production build in the `/frontend/build` directory.
 
 **Prepare the Distribution Folder:**
 
