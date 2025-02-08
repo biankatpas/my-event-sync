@@ -72,7 +72,7 @@
     rxjs "^7.8.1"
     tslib "^2.5.0"
 
-"@aws-amplify/auth@6.10.2":
+"@aws-amplify/auth@6.10.2", "@aws-amplify/auth@^6.10.2":
   version "6.10.2"
   resolved "https://registry.yarnpkg.com/@aws-amplify/auth/-/auth-6.10.2.tgz#45351f174aa6726de39aeadc8f2af9679cfd7313"
   integrity sha512-vOkiH3kFd5kLRAwP4f0RCvWvVFldTe1R6kojJ7DXY5lZz1UFRTPTGKV7PD2YKlxOvNUwv75cV6OwL42FfF8zMA==
@@ -81,7 +81,7 @@
     "@smithy/types" "^3.3.0"
     tslib "^2.5.0"
 
-"@aws-amplify/core@6.9.3":
+"@aws-amplify/core@6.9.3", "@aws-amplify/core@^6.9.3":
   version "6.9.3"
   resolved "https://registry.yarnpkg.com/@aws-amplify/core/-/core-6.9.3.tgz#53e5f71eb5cee788cc0d044e726a84ea2e6609ee"
   integrity sha512-u1BgDmiTPTibQe/PLRV1OMTnxD1aF1/Xz7ZGpzXaQqCCxVs86lLP+bLM4/V9WkCYZSn1ARTSDYaiz06EigyBiQ==

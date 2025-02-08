@@ -30,6 +30,9 @@
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "auth": {
+        "myeventsyncd0b63a50": {}
       }
     }
   }
