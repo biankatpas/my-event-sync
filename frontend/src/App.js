@@ -322,71 +322,72 @@ function App() {
           )}
         </Box>
 
-        {/* Formulário para novo evento */}
-        <Paper style={{ padding: '0.5rem', marginBottom: '2rem' }}>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item xs={12} sm="auto">
-              <TextField
-                label="Evento"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                fullWidth
-              />
+        {/* Formulário para novo evento - visível apenas para usuários autenticados */}
+        {isAuthenticated && (
+          <Paper style={{ padding: '0.5rem', marginBottom: '2rem' }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12} sm="auto">
+                <TextField
+                  label="Evento"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm>
+                <TextField
+                  label="Descrição"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm="auto">
+                <TextField
+                  label="Envolvidos"
+                  name="guests"
+                  value={formData.guests}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm="auto">
+                <TextField
+                  label="Data"
+                  name="date"
+                  type="date"
+                  InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  fullWidth
+                  sx={{ width: { xs: '100%', sm: '150px' } }}
+                />
+              </Grid>
+              <Grid item xs={12} sm="auto">
+                <TextField
+                  label="Horário"
+                  name="time"
+                  type="time"
+                  InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
+                  value={formData.time}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm="auto" sx={{ ml: { xs: 0, sm: 'auto' }, mt: { xs: 1, sm: 0 } }}>
+                <Button
+                  variant="contained"
+                  onClick={handleAddEvent}
+                  sx={{ ...primaryButtonSx, width: 60, minWidth: 60, height: '56px' }}
+                >
+                  <AddCircleOutlineIcon fontSize="small" />
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm>
-              <TextField
-                label="Descrição"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm="auto">
-              <TextField
-                label="Envolvidos"
-                name="guests"
-                value={formData.guests}
-                onChange={handleInputChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm="auto">
-              <TextField
-                label="Data"
-                name="date"
-                type="date"
-                InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
-                value={formData.date}
-                onChange={handleInputChange}
-                fullWidth
-                sx={{ width: { xs: '100%', sm: '150px' } }}
-              />
-            </Grid>
-            <Grid item xs={12} sm="auto">
-              <TextField
-                label="Horário"
-                name="time"
-                type="time"
-                InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
-                value={formData.time}
-                onChange={handleInputChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm="auto" sx={{ ml: { xs: 0, sm: 'auto' }, mt: { xs: 1, sm: 0 } }}>
-              <Button
-                variant="contained"
-                onClick={handleAddEvent}
-                sx={{ ...primaryButtonSx, width: 60, minWidth: 60, height: '56px' }}
-                disabled={!isAuthenticated}
-              >
-                <AddCircleOutlineIcon fontSize="small" />
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
+          </Paper>
+        )}
 
         {/* Exibição dos eventos */}
         <Grid container spacing={1}>
@@ -445,26 +446,27 @@ function App() {
                       {event.description}
                     </Typography>
                   </CardContent>
-                  <CardActions sx={{ justifyContent: 'flex-end' }}>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleOpenEditDialog(event)}
-                      sx={primaryButtonSx}
-                      size="small"
-                      disabled={!isAuthenticated}
-                    >
-                      <EditIcon fontSize="small" />
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleRemoveEvent(event.id)}
-                      sx={secondaryButtonSx}
-                      size="small"
-                      disabled={!isAuthenticated}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </Button>
-                  </CardActions>
+                  {/* Botões de editar e remover evento aparecem apenas se o usuário estiver autenticado */}
+                  {isAuthenticated && (
+                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleOpenEditDialog(event)}
+                        sx={primaryButtonSx}
+                        size="small"
+                      >
+                        <EditIcon fontSize="small" />
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleRemoveEvent(event.id)}
+                        sx={secondaryButtonSx}
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </Button>
+                    </CardActions>
+                  )}
                 </Card>
               </Grid>
             );
@@ -475,7 +477,7 @@ function App() {
         <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} fullWidth maxWidth="sm">
           <DialogContent sx={{ pt: '1.5rem' }}>
             {editingEvent && (
-              <Grid container spacing={1}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
                     label="Evento"
