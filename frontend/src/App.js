@@ -27,7 +27,6 @@ import { Hub } from '@aws-amplify/core';
 import { useNavigate } from 'react-router-dom';
 import '@aws-amplify/ui-react/styles.css';
 
-// Define traduções para pt-BR
 I18n.putVocabularies({
   'pt-BR': {
     'Sign In': 'Entrar',
@@ -69,6 +68,27 @@ const convertDdMmYyyyToYyyyMmDd = (dateStr) => {
   const parts = dateStr.split('/');
   if (parts.length !== 3) return dateStr;
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
+};
+
+const getTitleBackgroundColor = (guest) => {
+  if (!guest) return 'transparent';
+  const normalizedGuest = guest
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+  switch (normalizedGuest) {
+    case 'joao':
+      return "#228B22";
+    case 'bianka':
+      return "#1E90FF";
+    case 'angelita':
+      return "#9370DB";
+    case 'mel':
+      return "#D81B60";
+    default:
+      return "#696969";
+  }
 };
 
 const theme = createTheme({
@@ -116,7 +136,6 @@ function App() {
   const [editingEvent, setEditingEvent] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  // Estados de autenticação
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -129,7 +148,6 @@ function App() {
   dayAfterTomorrowDate.setDate(todayDate.getDate() + 2);
   const dayAfterTomorrowStr = dayAfterTomorrowDate.toISOString().split('T')[0];
 
-  // Atualização: para eventos do dia após amanhã, os chips terão fundo "#fff176"
   const getChipStyles = (eventDate) => {
     if (eventDate < today) {
       return { bg: "#e0e0e0", color: "black" };
@@ -154,7 +172,7 @@ function App() {
     } else if (eventDate === dayAfterTomorrowStr) {
       return "#fff9c4";
     } else {
-      return "#f0f8ff";
+      return "#f2f2f2";
     }
   };
 
@@ -402,7 +420,9 @@ function App() {
                     backgroundColor: cardBg,
                     height: '14rem', // altura definida em rem (14rem)
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    border: `5px solid ${getTitleBackgroundColor(event.guests)}`,
+                    borderRadius: '8px'
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1, overflow: 'hidden', mb: 1 }}>
