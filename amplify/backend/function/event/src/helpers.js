@@ -24,7 +24,7 @@ const addEvent = async (data) => {
     TableName: TABLE_NAME,
     Item: {
       id: uuidv4(),
-      title: data.title,
+      title: data.title.toUpperCase(),
       description: data.description,
       guests: data.guests,
       date: data.date,
@@ -52,7 +52,7 @@ const editEvent = async (data) => {
       "#tm": "time"
     },
     ExpressionAttributeValues: {
-      ":t": data.title,
+      ":t": data.title.toUpperCase(),
       ":d": data.description,
       ":g": data.guests,
       ":dt": data.date,
