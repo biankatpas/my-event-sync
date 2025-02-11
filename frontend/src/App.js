@@ -411,62 +411,71 @@ function App() {
         <Grid container spacing={1}>
           {events.map((event) => {
             const cardBg = getCardBackgroundColor(event.date);
-            const chipStyles = getChipStyles(event.date);
             return (
-              // Configuração para 6 cards por linha: xs=12, sm=6, md=4, lg=2, xl=2
               <Grid item xs={12} sm={6} md={4} lg={2} xl={2} key={event.id}>
                 <Card
                   sx={{
                     backgroundColor: cardBg,
-                    height: '14rem', // altura definida em rem (14rem)
+                    height: '14rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    border: `5px solid ${getTitleBackgroundColor(event.guests)}`,
-                    borderRadius: '8px'
+                    border: `1px solid}`,
+                    borderRadius: '3px'
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1, overflow: 'hidden', mb: 1 }}>
+                    {/* Cabeçalho com data e horário */}
                     <Grid container spacing={1} alignItems="center">
                       <Grid item>
                         <CalendarTodayIcon />
                       </Grid>
                       <Grid item xs>
-                        <Typography variant="h6" noWrap>
-                          {event.title}
+                        <Typography
+                          variant="h5" 
+                          noWrap
+                          align='center'
+                          sx={{
+                            fontFamily: '"Roboto Slab", serif',
+                            fontWeight: 900,
+                          }}
+                        >
+                          {convertYyyyMmDdToDdMmYyyy(event.date)} - {event.time}
                         </Typography>
                       </Grid>
                     </Grid>
-                    <Chip
-                      label={event.guests}
+                    
+                    {/* Chip combinando título e guests lado a lado */}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt:1 }}>
+                      <Chip
+                        label={`${event.guests.toUpperCase()} - ${event.title}`}
+                        sx={{
+                          backgroundColor: getTitleBackgroundColor(event.guests),
+                          color: 'white',
+                          fontWeight: 'bold',
+                          mt: 0.5
+                        }}
+                        size="small"
+                      />
+                    </Box>
+                    
+                    {/* Descrição do evento */}
+                    <Typography
+                      variant="body1"
                       sx={{
-                        backgroundColor: chipStyles.bg,
-                        color: chipStyles.color,
-                        fontWeight: 'bold',
-                        mt: 0.5
+                        mt: 2,
+                        fontFamily: '"Roboto", sans-serif',
+                        fontSize: '1rem',
+                        lineHeight: 1.6,
+                        fontWeight: 600,
+                        color: '#424242',
+                        textAlign: 'center'
                       }}
-                      size="small"
-                    />
-                    <Grid container spacing={1} sx={{ mt: 1 }}>
-                      <Grid item>
-                        <Chip
-                          label={convertYyyyMmDdToDdMmYyyy(event.date)}
-                          sx={{ backgroundColor: chipStyles.bg, color: chipStyles.color }}
-                          size="small"
-                        />
-                      </Grid>
-                      <Grid item>
-                        <Chip
-                          label={event.time}
-                          sx={{ backgroundColor: chipStyles.bg, color: chipStyles.color }}
-                          size="small"
-                        />
-                      </Grid>
-                    </Grid>
-                    <Typography variant="body2" sx={{ mt: 1 }} noWrap>
+                    >
                       {event.description}
                     </Typography>
                   </CardContent>
-                  {/* Botões de editar e remover evento aparecem apenas se o usuário estiver autenticado */}
+                  
+                  {/* Botões de editar e remover evento para usuários autenticados */}
                   {isAuthenticated && (
                     <CardActions sx={{ justifyContent: 'flex-end' }}>
                       <Button
