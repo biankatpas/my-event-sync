@@ -29,6 +29,7 @@ const addEvent = async (data) => {
       guests: data.guests,
       date: data.date,
       time: data.time,
+      owner: data.owner
     }
   };
 

@@ -125,11 +125,15 @@ function App() {
       alert('Por favor, preencha todos os campos.');
       return;
     }
+    const eventData = {
+      ...formData,
+      owner: user ? user.username : null,
+    };
     try {
       const response = await fetch(endpointUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(eventData)
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       await fetchEvents();
