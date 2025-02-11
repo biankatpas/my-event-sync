@@ -12,6 +12,7 @@ import Header from './components/Header';
 import EventForm from './components/EventForm';
 import EventCard from './components/EventCard';
 import EditEventDialog from './components/EditEventDialog';
+import OwnerFilter from './components/OwnerFilter';
 
 import { 
   convertYyyyMmDdToDdMmYyyy, 
@@ -65,6 +66,7 @@ function App() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [ownerFilter, setOwnerFilter] = useState('');
 
   useEffect(() => {
     Auth.getCurrentUser({ bypassCache: true })
@@ -200,6 +202,10 @@ function App() {
     }
   };
 
+  const filteredEvents = ownerFilter
+    ? events.filter(event => event.owner === ownerFilter)
+    : events;
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth={false} sx={{ width: '95%', marginTop: '2rem' }}>
@@ -212,6 +218,7 @@ function App() {
           onLogin={handleLogin}
           onLogout={handleLogout}
         />
+        <OwnerFilter events={events} onFilterChange={setOwnerFilter} />
         {isAuthenticated && (
           <EventForm 
             formData={formData} 
@@ -220,7 +227,7 @@ function App() {
           />
         )}
         <Grid container spacing={1}>
-          {events.map((event) => (
+          {filteredEvents.map((event) => (
             <EventCard
               key={event.id}
               event={event}
