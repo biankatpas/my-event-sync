@@ -20,13 +20,18 @@
         "deleteOldEvents": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
           "s3Key": "amplify-builds/deleteOldEvents-30653030694668765a72-build.zip"
+        },
+        "eventOwner": {
+          "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
+          "s3Key": "amplify-builds/eventOwner-6a364d6e423665495766-build.zip"
         }
       },
       "api": {
         "myeventsyncapi": {}
       },
       "storage": {
-        "dynamo3ebf100b": {}
+        "dynamo3ebf100b": {},
+        "dynamoa3fd081d": {}
       },
       "hosting": {
         "S3AndCloudFront": {}

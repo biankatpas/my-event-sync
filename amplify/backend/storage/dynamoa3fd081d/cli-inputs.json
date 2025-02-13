@@ -1,0 +1,10 @@
+{
+  "resourceName": "dynamoa3fd081d",
+  "tableName": "owner",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

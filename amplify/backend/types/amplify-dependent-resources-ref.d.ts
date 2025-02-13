@@ -33,6 +33,13 @@ export type AmplifyDependentResourcesAttributes = {
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
+    },
+    "eventOwner": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
     }
   },
   "hosting": {
@@ -49,6 +56,14 @@ export type AmplifyDependentResourcesAttributes = {
   },
   "storage": {
     "dynamo3ebf100b": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    },
+    "dynamoa3fd081d": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",

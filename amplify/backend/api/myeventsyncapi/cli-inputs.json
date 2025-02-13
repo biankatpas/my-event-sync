@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/owner": {
+      "name": "/owner",
+      "lambdaFunction": "eventOwner",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

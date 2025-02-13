@@ -9,6 +9,14 @@
           ],
           "category": "function",
           "resourceName": "event"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "eventOwner"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -75,6 +83,22 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "eventOwner": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "dynamoa3fd081d"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "hosting": {
@@ -100,6 +124,22 @@
         }
       ]
     },
+    "AMPLIFY_function_eventOwner_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventOwner"
+        }
+      ]
+    },
+    "AMPLIFY_function_eventOwner_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventOwner"
+        }
+      ]
+    },
     "AMPLIFY_function_event_deploymentBucketName": {
       "usedBy": [
         {
@@ -119,6 +159,10 @@
   },
   "storage": {
     "dynamo3ebf100b": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "dynamoa3fd081d": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }

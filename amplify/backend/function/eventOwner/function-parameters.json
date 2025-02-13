@@ -1,0 +1,10 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "dynamoa3fd081d": [
+        "read"
+      ]
+    }
+  }
+}
