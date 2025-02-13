@@ -80,7 +80,7 @@ Fill out the form at the top of the page with the event details:
 
 - `Evento`: Name of the event.
 - `Local`: Location.
-- `Participantes`: List of participants.
+- `Envolvidos`: List of participants.
 - `Data`: Select the date (using the native date input).
 - `Horário`: Specify the time.
 
@@ -91,7 +91,7 @@ Click `Adicionar Evento` to submit. The event will be sent to the backend and ap
 The events table displays:
 
 - `Data`: Formatted as `dd/mm/yyyy`.
-- `Horário`, `Participantes`, `Evento`, `Local`: Details of the event.
+- `Horário`, `Envolvidos`, `Evento`, `Local`: Details of the event.
 
 Events scheduled for the current day are highlighted with a subtle background color.
 
