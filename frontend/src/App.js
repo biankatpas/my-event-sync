@@ -245,11 +245,19 @@ function App() {
           onLogin={handleLogin}
           onLogout={handleLogout}
         />
-        <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
+        <Box
+          display="flex"
+          flexDirection={{ xs: 'column', sm: 'row' }}
+          alignItems="center"
+          gap={2}
+          mb={2}
+        >
           <Box sx={{ width: { xs: '100%', sm: '200px' } }}>
             <OwnerFilter owners={owners} onFilterChange={setOwnerFilter} />
           </Box>
-          <DateRangeFilter onDateRangeChange={setDateRange} />
+          <Box sx={{ flexGrow: 1, width: { xs: '100%', sm: 'auto' } }}>
+            <DateRangeFilter onDateRangeChange={setDateRange} />
+          </Box>
         </Box>
         {isAuthenticated && (
           <EventForm 

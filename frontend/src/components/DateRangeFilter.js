@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 
 const primaryButtonSx = {
-    backgroundColor: '#64b5f6',
-    color: 'white',
-    padding: '4px',
-    '&:hover': { backgroundColor: '#42a5f5' }
+  backgroundColor: '#64b5f6',
+  color: 'white',
+  padding: '4px',
+  '&:hover': { backgroundColor: '#42a5f5' }
 };
 
 const DateRangeFilter = ({ onDateRangeChange }) => {
@@ -31,27 +31,46 @@ const DateRangeFilter = ({ onDateRangeChange }) => {
   };
 
   return (
-    <Box display="flex" alignItems="center" gap={2} mt={2}>
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection={{ xs: 'column', sm: 'row' }}
+      alignItems={{ xs: 'stretch', sm: 'center' }}
+      gap={2}
+      mt={2}
+    >
       <TextField
         label="Data Inicial"
         type="date"
         value={startDate}
         onChange={handleStartDateChange}
-        InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
-        sx={{ width: { xs: '100%', sm: '150px' } }}
+        InputLabelProps={{ shrink: true }}
+        fullWidth
+        sx={{
+          width: { xs: '100%', sm: 'auto' },
+        }}
       />
       <TextField
         label="Data Final"
         type="date"
         value={endDate}
         onChange={handleEndDateChange}
-        InputLabelProps={{ shrink: true, sx: { pt: { xs: 1, sm: 0 } } }}
-        sx={{ width: { xs: '100%', sm: '150px' } }}
+        InputLabelProps={{ shrink: true }}
+        fullWidth
+        sx={{
+          width: { xs: '100%', sm: 'auto' },
+        }}
       />
-      <Button 
-        variant="outlined" 
+      <Button
+        variant="outlined"
         onClick={handleClear}
-        sx={{ ...primaryButtonSx, width: 120, minWidth: 60, height: '56px' }}
+        fullWidth
+        sx={{
+          ...primaryButtonSx,
+          width: { xs: '100%', sm: '120px' },
+          minWidth: 60,
+          height: '56px'
+        }}
       >
         Limpar
       </Button>
