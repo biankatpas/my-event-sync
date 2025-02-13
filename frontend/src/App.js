@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Grid } from '@mui/material';
+import { Container, Typography, Grid, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as Auth from '@aws-amplify/auth';
 import { Hub } from '@aws-amplify/core';
@@ -13,6 +13,7 @@ import EventForm from './components/EventForm';
 import EventCard from './components/EventCard';
 import EditEventDialog from './components/EditEventDialog';
 import OwnerFilter from './components/OwnerFilter';
+import DateRangeFilter from './components/DateRangeFilter';
 
 import { 
   convertYyyyMmDdToDdMmYyyy, 
@@ -52,9 +53,12 @@ const secondaryButtonSx = {
 
 function App() {
   const endpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/event';
+  const ownerEndpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/owner';
+
   const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
+  const [owners, setOwners] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -67,6 +71,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [ownerFilter, setOwnerFilter] = useState('');
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   useEffect(() => {
     Auth.getCurrentUser({ bypassCache: true })
@@ -104,6 +109,7 @@ function App() {
 
   useEffect(() => {
     fetchEvents();
+    fetchOwners();
   }, []);
 
   const fetchEvents = async () => {
@@ -114,6 +120,17 @@ function App() {
       setEvents(data);
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
+    }
+  };
+
+  const fetchOwners = async () => {
+    try {
+      const response = await fetch(ownerEndpointUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();     
+      setOwners(data);
+    } catch (error) {
+      console.error('Erro ao buscar owners:', error);
     }
   };
 
@@ -202,9 +219,19 @@ function App() {
     }
   };
 
-  const filteredEvents = ownerFilter
-    ? events.filter(event => event.owner === ownerFilter)
-    : events;
+  const filteredEvents = events.filter((event) => {
+    let ownerMatches = ownerFilter ? event.owner === ownerFilter : true;
+    let dateMatches = true;
+    
+    if (dateRange.start) {
+      dateMatches = event.date >= dateRange.start;
+    }
+    if (dateRange.end) {
+      dateMatches = dateMatches && event.date <= dateRange.end;
+    }
+    
+    return ownerMatches && dateMatches;
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -218,7 +245,12 @@ function App() {
           onLogin={handleLogin}
           onLogout={handleLogout}
         />
-        <OwnerFilter events={events} onFilterChange={setOwnerFilter} />
+        <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
+          <Box sx={{ width: { xs: '100%', sm: '200px' } }}>
+            <OwnerFilter owners={owners} onFilterChange={setOwnerFilter} />
+          </Box>
+          <DateRangeFilter onDateRangeChange={setDateRange} />
+        </Box>
         {isAuthenticated && (
           <EventForm 
             formData={formData} 

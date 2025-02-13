@@ -14,22 +14,13 @@ Amplify Params - DO NOT EDIT *//**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
-const { listItems } = require('./helpers');
+const { listItems, buildResponse } = require('./helpers');
 
 exports.handler = async (event, context) => {  
   try {
     const items = await listItems();
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(items),
-    };
+    return buildResponse(200, items);
   } catch (error) {
-    console.error('Erro ao listar itens:', error);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "Erro interno no servidor" }),
-    };
+    return buildResponse(500, { error: error.message });
   }
 };

@@ -17,4 +17,15 @@ const listItems = async () => {
   }
 };
 
-module.exports = { listItems };
+const buildResponse = (statusCode, body) => {
+  return {
+    statusCode: statusCode,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify(body)
+  };
+};
+
+module.exports = { listItems, buildResponse };

@@ -1,9 +1,6 @@
-// router.js
 const { addEvent, editEvent, listEvents, removeEvent, buildResponse } = require('./helpers');
 
 exports.handleRequest = async (event) => {
-  console.log("Received event:", JSON.stringify(event));
-
   try {
     switch (event.httpMethod) {
       case 'GET':

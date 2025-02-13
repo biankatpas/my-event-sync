@@ -1,18 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const OwnerFilter = ({ events, onFilterChange }) => {
+const OwnerFilter = ({ owners, onFilterChange }) => {
   const [selectedOwner, setSelectedOwner] = useState('');
 
   const ownerOptions = useMemo(() => {
-    const ownersSet = new Set();
-    events.forEach(event => {
-      if (event.owner) {
-        ownersSet.add(event.owner);
-      }
-    });
-    return Array.from(ownersSet);
-  }, [events]);
+    return owners || [];
+  }, [owners]);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -21,7 +15,7 @@ const OwnerFilter = ({ events, onFilterChange }) => {
   };
 
   return (
-    <FormControl fullWidth sx={{ marginBottom: 2 }}>
+    <FormControl fullWidth sx={{ marginBottom: 2, marginTop: 4 }}>
       <InputLabel id="owner-filter-label">Filtrar Eventos</InputLabel>
       <Select
         labelId="owner-filter-label"
@@ -33,9 +27,9 @@ const OwnerFilter = ({ events, onFilterChange }) => {
         <MenuItem value="">
           <em>Todos</em>
         </MenuItem>
-        {ownerOptions.map((owner, index) => (
-          <MenuItem key={index} value={owner}>
-            {owner}
+        {ownerOptions.map((owner) => (
+          <MenuItem key={owner.id} value={owner.id}>
+            {owner.name}
           </MenuItem>
         ))}
       </Select>

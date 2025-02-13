@@ -15,7 +15,7 @@
       "function": {
         "event": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/event-376e66447a6f4e50642b-build.zip"
+          "s3Key": "amplify-builds/event-354d4943374f786f774e-build.zip"
         },
         "deleteOldEvents": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
@@ -23,7 +23,7 @@
         },
         "eventOwner": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/eventOwner-6a364d6e423665495766-build.zip"
+          "s3Key": "amplify-builds/eventOwner-63316f6f2b764e2f4756-build.zip"
         }
       },
       "api": {
