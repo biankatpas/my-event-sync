@@ -27,6 +27,9 @@
     "storagedynamoa3fd081dStreamArn": {
       "Type": "String",
       "Default": "storagedynamoa3fd081dStreamArn"
+    },
+    "ownerTable": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,6 +93,9 @@
             },
             "STORAGE_DYNAMOA3FD081D_STREAMARN": {
               "Ref": "storagedynamoa3fd081dStreamArn"
+            },
+            "OWNER_TABLE": {
+              "Ref": "ownerTable"
             }
           }
         },

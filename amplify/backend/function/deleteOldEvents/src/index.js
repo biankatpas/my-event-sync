@@ -12,7 +12,7 @@ Amplify Params - DO NOT EDIT */
 
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = "event-dev";
+const TABLE_NAME = process.env.EVENT_TABLE;
 
 exports.handler = async (event) => {
   const today = new Date().toISOString().split('T')[0];

@@ -9,5 +9,11 @@
         "delete"
       ]
     }
-  }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "eventTable",
+      "environmentVariableName": "EVENT_TABLE"
+    }
+  ]
 }

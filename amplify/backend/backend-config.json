@@ -116,6 +116,14 @@
         }
       ]
     },
+    "AMPLIFY_function_deleteOldEvents_eventTable": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteOldEvents"
+        }
+      ]
+    },
     "AMPLIFY_function_deleteOldEvents_s3Key": {
       "usedBy": [
         {
@@ -132,6 +140,14 @@
         }
       ]
     },
+    "AMPLIFY_function_eventOwner_ownerTable": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventOwner"
+        }
+      ]
+    },
     "AMPLIFY_function_eventOwner_s3Key": {
       "usedBy": [
         {
@@ -141,6 +157,14 @@
       ]
     },
     "AMPLIFY_function_event_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "event"
+        }
+      ]
+    },
+    "AMPLIFY_function_event_eventTable": {
       "usedBy": [
         {
           "category": "function",

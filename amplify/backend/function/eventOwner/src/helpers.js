@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const TABLE_NAME = 'owner-dev';
+const TABLE_NAME = process.env.OWNER_TABLE;
 
 const listItems = async () => {
   const params = {

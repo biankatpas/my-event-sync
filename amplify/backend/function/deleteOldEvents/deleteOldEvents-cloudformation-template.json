@@ -27,6 +27,9 @@
     "storagedynamo3ebf100bStreamArn": {
       "Type": "String",
       "Default": "storagedynamo3ebf100bStreamArn"
+    },
+    "eventTable": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,6 +93,9 @@
             },
             "STORAGE_DYNAMO3EBF100B_STREAMARN": {
               "Ref": "storagedynamo3ebf100bStreamArn"
+            },
+            "EVENT_TABLE": {
+              "Ref": "eventTable"
             }
           }
         },

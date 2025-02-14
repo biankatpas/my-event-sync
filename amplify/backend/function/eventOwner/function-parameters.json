@@ -6,5 +6,11 @@
         "read"
       ]
     }
-  }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "ownerTable",
+      "environmentVariableName": "OWNER_TABLE"
+    }
+  ]
 }

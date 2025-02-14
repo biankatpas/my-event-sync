@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = "event-dev";
+const TABLE_NAME = process.env.EVENT_TABLE;
 
 const buildResponse = (statusCode, body) => {
   return {

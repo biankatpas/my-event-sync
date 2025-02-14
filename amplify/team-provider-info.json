@@ -15,15 +15,18 @@
       "function": {
         "event": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/event-354d4943374f786f774e-build.zip"
+          "s3Key": "amplify-builds/event-695a444257613976736b-build.zip",
+          "eventTable": "event-dev"
         },
         "deleteOldEvents": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/deleteOldEvents-30653030694668765a72-build.zip"
+          "s3Key": "amplify-builds/deleteOldEvents-33575773666273467043-build.zip",
+          "eventTable": "event-dev"
         },
         "eventOwner": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/eventOwner-63316f6f2b764e2f4756-build.zip"
+          "s3Key": "amplify-builds/eventOwner-41564361503051767530-build.zip",
+          "ownerTable": "owner-dev"
         }
       },
       "api": {
