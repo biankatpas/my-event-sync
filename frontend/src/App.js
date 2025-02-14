@@ -5,6 +5,7 @@ import * as Auth from '@aws-amplify/auth';
 import { Hub } from '@aws-amplify/core';
 import { useNavigate } from 'react-router-dom';
 import '@aws-amplify/ui-react/styles.css';
+import { customGet, customPost, customPut, customDel } from './customApi';
 
 import './localization';
 
@@ -52,9 +53,7 @@ const secondaryButtonSx = {
 };
 
 function App() {
-  const endpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/event';
-  const ownerEndpointUrl = 'https://0gssb4529e.execute-api.us-east-1.amazonaws.com/dev/owner';
-
+  const apiName = 'myeventsyncapi';
   const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
@@ -114,9 +113,7 @@ function App() {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch(endpointUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
+      const data = await customGet(apiName, '/event', {});
       setEvents(data);
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
@@ -125,9 +122,7 @@ function App() {
 
   const fetchOwners = async () => {
     try {
-      const response = await fetch(ownerEndpointUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();     
+      const data = await customGet(apiName, '/owner', {});    
       setOwners(data);
     } catch (error) {
       console.error('Erro ao buscar owners:', error);
@@ -149,12 +144,10 @@ function App() {
       owner: user ? user.username : null,
     };
     try {
-      const response = await fetch(endpointUrl, {
-        method: 'POST',
+      await customPost(apiName, '/event', {
+        body: JSON.stringify(eventData),
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(eventData)
       });
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       await fetchEvents();
       setFormData({ title: '', description: '', guests: '', date: '', time: '' });
     } catch (error) {
@@ -164,8 +157,7 @@ function App() {
 
   const handleRemoveEvent = async (id) => {
     try {
-      const response = await fetch(`${endpointUrl}?id=${id}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      await customDel(apiName, `/event?id=${id}`, {});
       await fetchEvents();
     } catch (error) {
       console.error('Erro ao remover evento:', error);
@@ -192,12 +184,10 @@ function App() {
     if (!editingEvent) return;
     const updatedEvent = { ...editingEvent, date: convertDdMmYyyyToYyyyMmDd(editingEvent.date) };
     try {
-      const response = await fetch(endpointUrl, {
-        method: 'PUT',
+      await customPut(apiName, '/event', {
+        body: JSON.stringify(updatedEvent),
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedEvent)
       });
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       await fetchEvents();
       handleCloseEditDialog();
     } catch (error) {
