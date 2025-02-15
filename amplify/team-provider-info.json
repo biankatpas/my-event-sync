@@ -22,7 +22,7 @@
         },
         "deleteOldEvents": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/deleteOldEvents-33575773666273467043-build.zip",
+          "s3Key": "amplify-builds/deleteOldEvents-7935626e63513565774e-build.zip",
           "eventTable": "event-dev"
         },
         "eventOwner": {
