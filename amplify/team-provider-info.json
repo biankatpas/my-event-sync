@@ -9,13 +9,14 @@
       "UnauthRoleName": "amplify-myeventsync-dev-7e445-unauthRole",
       "StackName": "amplify-myeventsync-dev-7e445",
       "StackId": "arn:aws:cloudformation:us-east-1:390402549321:stack/amplify-myeventsync-dev-7e445/ee4a64e0-e4d3-11ef-98e0-0affc4789135",
-      "AmplifyAppId": "d27uh7n62mr4t5"
+      "AmplifyAppId": "d27uh7n62mr4t5",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-myeventsync-dev-7e445-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
         "event": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/event-695a444257613976736b-build.zip",
+          "s3Key": "amplify-builds/event-6e386e316b7a74654c74-build.zip",
           "eventTable": "event-dev"
         },
         "deleteOldEvents": {

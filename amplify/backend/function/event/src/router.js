@@ -1,7 +1,12 @@
-const { addEvent, editEvent, listEvents, removeEvent, buildResponse } = require('./helpers');
+const { addEvent, editEvent, listEvents, removeEvent, verifyOwner, buildResponse } = require('./helpers');
 
 exports.handleRequest = async (event) => {
+  console.log("Request Context:", JSON.stringify(event.requestContext));
+  
   try {
+    const loggedUserId = event.requestContext?.authorizer?.claims?.sub;
+    console.log("Logged user id:", loggedUserId);
+
     switch (event.httpMethod) {
       case 'GET':
         return await listEvents();
@@ -13,9 +18,11 @@ exports.handleRequest = async (event) => {
         if (!eventId) {
           return buildResponse(400, { message: "Event id is required for deletion." });
         }
+        // await verifyOwner(eventId, loggedUserId);
         return await removeEvent(eventId);
       case 'PUT':
         const updateData = JSON.parse(event.body);
+        // await verifyOwner(updateData.id, loggedUserId);
         return await editEvent(updateData);
       default:
         return buildResponse(405, { message: "Method not allowed." });

@@ -14,6 +14,25 @@ const buildResponse = (statusCode, body) => {
   };
 };
 
+const getEventById = async (id) => {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: { id }
+  };
+  const result = await dynamoDb.get(params).promise();
+  return result.Item;
+};
+
+const verifyOwner = async (eventId, loggedUserId) => {
+  const eventItem = await getEventById(eventId);
+  if (!eventItem) {
+    throw new Error("Event not found.");
+  }
+  if (eventItem.owner !== loggedUserId) {
+    throw new Error("Method not allowed.");
+  }
+};
+
 const addEvent = async (data) => {
   if (!data || !data.title || !data.description || !data.guests || !data.date || !data.time) {
     throw new Error("Invalid event data. Must include title, description, guests, date, and time.");
@@ -103,4 +122,4 @@ const removeEvent = async (id) => {
   return buildResponse(200, { message: "Event removed successfully." });
 };
 
-module.exports = { addEvent, editEvent, listEvents, removeEvent, buildResponse };
+module.exports = { addEvent, editEvent, listEvents, removeEvent, verifyOwner, buildResponse };
