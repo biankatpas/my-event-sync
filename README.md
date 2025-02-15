@@ -3,6 +3,13 @@
 My Event Sync is a serverless event scheduling application that uses AWS Amplify for the backend (including AWS Lambda and DynamoDB) and a React frontend built with Material UI. 
 The app allows users to create, list, edit, and delete events.
 
+<p align="center">
+  <img src="docs/img/login.jpeg" width="200" style="margin-right: 10px;" />
+  <img src="docs/img/home.jpeg" width="200" style="margin-right: 10px;" />
+  <img src="docs/img/new-event.jpeg" width="200" style="margin-right: 10px;" />
+  <img src="docs/img/edit-event.jpeg" width="200" />
+</p>
+
 ## Features
 
 - **Event Management:** Create, view, edit, and delete events.
