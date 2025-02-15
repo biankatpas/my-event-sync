@@ -38,6 +38,9 @@
     },
     "eventTable": {
       "Type": "String"
+    },
+    "cognitoUserPoolId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -110,6 +113,9 @@
             },
             "EVENT_TABLE": {
               "Ref": "eventTable"
+            },
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cognitoUserPoolId"
             }
           }
         },

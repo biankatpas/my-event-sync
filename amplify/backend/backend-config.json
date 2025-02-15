@@ -156,6 +156,14 @@
         }
       ]
     },
+    "AMPLIFY_function_event_cognitoUserPoolId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "event"
+        }
+      ]
+    },
     "AMPLIFY_function_event_deploymentBucketName": {
       "usedBy": [
         {

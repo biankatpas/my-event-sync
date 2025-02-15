@@ -1,9 +1,16 @@
 const { addEvent, editEvent, listEvents, removeEvent, verifyOwner, buildResponse } = require('./helpers');
+const { checkAuth } = require('./auth');
 
-exports.handleRequest = async (event) => {
-  console.log("Request Context:", JSON.stringify(event.requestContext));
-  
+exports.handleRequest = async (event) => {  
+  console.log("Received headers:", JSON.stringify(event.headers));
+
   try {
+    
+    if (event.httpMethod !== 'GET') {
+      const authResult = await checkAuth(event);
+      event.requestContext.authorizer = authResult.user;
+    }
+
     const loggedUserId = event.requestContext?.authorizer?.claims?.sub;
     console.log("Logged user id:", loggedUserId);
 

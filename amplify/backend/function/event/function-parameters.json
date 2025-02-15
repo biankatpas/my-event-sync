@@ -14,6 +14,10 @@
     {
       "cloudFormationParameterName": "eventTable",
       "environmentVariableName": "EVENT_TABLE"
+    },
+    {
+      "cloudFormationParameterName": "cognitoUserPoolId",
+      "environmentVariableName": "COGNITO_USER_POOL_ID"
     }
   ]
 }

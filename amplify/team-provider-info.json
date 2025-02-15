@@ -16,8 +16,9 @@
       "function": {
         "event": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",
-          "s3Key": "amplify-builds/event-6e386e316b7a74654c74-build.zip",
-          "eventTable": "event-dev"
+          "s3Key": "amplify-builds/event-37586971493850577a64-build.zip",
+          "eventTable": "event-dev",
+          "cognitoUserPoolId": "us-east-1_sAR2WEuSE"
         },
         "deleteOldEvents": {
           "deploymentBucketName": "amplify-myeventsync-dev-7e445-deployment",

@@ -1,11 +1,41 @@
 import { Amplify } from 'aws-amplify';
+import * as Auth from '@aws-amplify/auth';
 
 const getEndpoint = (apiName) => {
   const config = Amplify.getConfig();
   if (!config.API || !config.API.REST || !config.API.REST[apiName]) {
-    throw new Error(`Endpoint para API "${apiName}" não encontrado na configuração.`);
+    throw new Error(`Endpoint not found for API: ${apiName}`);
   }
   return config.API.REST[apiName].endpoint;
+};
+
+const getAuthToken = async () => {
+  try {
+    const session = await Auth.fetchAuthSession();
+    if (
+      session &&
+      session.tokens &&
+      session.tokens.accessToken &&
+      typeof session.tokens.accessToken.toString === 'function'
+    ) {
+      return session.tokens.accessToken.toString();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting auth token:", error);
+    return null;
+  }
+};
+
+const attachAuthHeader = async (init = {}) => {
+  const token = await getAuthToken();
+  if (token) {
+    init.headers = {
+      ...(init.headers || {}),
+      'Authorization': `Bearer ${token}`
+    };
+  }
+  return init;
 };
 
 export const customGet = async (apiName, path, init = {}) => {
@@ -21,6 +51,8 @@ export const customGet = async (apiName, path, init = {}) => {
 export const customPost = async (apiName, path, init = {}) => {
   const endpoint = getEndpoint(apiName);
   const url = `${endpoint}${path}`;
+  
+  init = await attachAuthHeader(init);
   const response = await fetch(url, {
     ...init,
     method: 'POST',
@@ -34,6 +66,8 @@ export const customPost = async (apiName, path, init = {}) => {
 export const customPut = async (apiName, path, init = {}) => {
   const endpoint = getEndpoint(apiName);
   const url = `${endpoint}${path}`;
+
+  init = await attachAuthHeader(init);
   const response = await fetch(url, {
     ...init,
     method: 'PUT',
@@ -47,6 +81,8 @@ export const customPut = async (apiName, path, init = {}) => {
 export const customDel = async (apiName, path, init = {}) => {
   const endpoint = getEndpoint(apiName);
   const url = `${endpoint}${path}`;
+  
+  init = await attachAuthHeader(init);
   const response = await fetch(url, {
     ...init,
     method: 'DELETE',
