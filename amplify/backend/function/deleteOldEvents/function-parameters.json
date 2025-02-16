@@ -2,6 +2,7 @@
   "permissions": {
     "storage": {
       "dynamo3ebf100b": [
+        "read",
         "delete"
       ]
     }
